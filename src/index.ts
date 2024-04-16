@@ -1,29 +1,29 @@
 require('dotenv').config();
 import express, { Response } from 'express';
 import { getMetadata } from './lib';
-import { checkForCache, createCache } from './lib/cache';
+// import { checkForCache, createCache } from './lib/cache';
 import { APIOutput } from './types';
-import { createClient } from '@vercel/kv';
+// import { createClient } from '@vercel/kv';
 
 const app = express();
 
 const port = Number(process.env.PORT || 8080);
 
-var redis = createClient({
-  url: process.env.KV_REST_API_URL!,
-  token: process.env.KV_REST_API_TOKEN!,
-});
+// var redis = createClient({
+//   url: process.env.KV_REST_API_URL!,
+//   token: process.env.KV_REST_API_TOKEN!,
+// });
 
-const limiter = require('express-limiter')(app, redis);
+// const limiter = require('express-limiter')(app, redis);
 
-limiter({
-  path: '/v2',
-  method: 'get',
-  lookup: ['connection.remoteAddress'],
-  // 300 requests per minute
-  total: 300,
-  expire: 1000 * 60,
-});
+// limiter({
+//   path: '/v2',
+//   method: 'get',
+//   lookup: ['connection.remoteAddress'],
+//   // 300 requests per minute
+//   total: 300,
+//   expire: 1000 * 60,
+// });
 
 const sendResponse = (res: Response, output: APIOutput | null) => {
   if (!output) {
