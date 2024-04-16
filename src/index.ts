@@ -3,19 +3,16 @@ import express, { Response } from 'express';
 import { getMetadata } from './lib';
 import { checkForCache, createCache } from './lib/cache';
 import { APIOutput } from './types';
+import { createClient } from '@vercel/kv';
 
 const app = express();
 
 const port = Number(process.env.PORT || 8080);
 
-if (process.env.REDISTOGO_URL) {
-  var rtg = require('url').parse(process.env.REDISTOGO_URL);
-  var redis = require('redis').createClient(rtg.port, rtg.hostname);
-
-  redis.auth(rtg.auth.split(':')[1]);
-} else {
-  var redis = require('redis').createClient();
-}
+var redis = createClient({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
 
 const limiter = require('express-limiter')(app, redis);
 
